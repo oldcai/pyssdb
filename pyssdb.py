@@ -10,20 +10,21 @@ A SSDB Client Library for Python.
 :license: BSD 2-clause License, see LICENSE for more details.
 '''
 
+from __future__ import unicode_literals
 import os
 import socket
 import functools
 import itertools
 
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 __author__ = 'Yue Du <ifduyue@gmail.com>'
 __url__ = 'https://github.com/ifduyue/pyssdb'
 __license__ = 'BSD 2-Clause License'
 
 
 def utf8(s):
-    return s.encode('utf8') if isinstance(s, unicode) else s
+    return s.encode('utf8') if isinstance(s, str) else s
 
 
 class error(Exception):
@@ -79,7 +80,7 @@ class Connection(object):
         if isinstance(args[-1], int):
             args = args[:-1] + (str(args[-1]), )
         buf = ''.join('%d\n%s\n' % (len(i), i) for i in args) + '\n'
-        self._sock.sendall(buf)
+        self._sock.sendall(utf8(buf))
 
     def recv(self):
         cmd = self.last_cmd
